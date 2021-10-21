@@ -23,7 +23,9 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-dropzone": "^11.4.2",
-    "react-hook-form": "^7.17.5"
+    "react-hook-form": "^7.17.5",
+    "recharts": "^2.1.4",
+    "uuidv4": "^6.2.12"
   },
   "devDependencies": {
     "@types/node": "^16.11.2",

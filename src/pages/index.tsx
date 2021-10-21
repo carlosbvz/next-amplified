@@ -26,7 +26,7 @@ function Home() {
         setPosts(allPosts.data.listPosts.items as Post[]);
         return allPosts.data.listPosts.items as Post[];
       } else {
-        throw new Error("Could not get posts");
+        throw new Error(t("errors.loadPostError"));
       }
     };
 
@@ -61,7 +61,6 @@ function Home() {
   );
 }
 
-// pages/index.js
 export function getStaticProps({ locale }: GetStaticPropsContext) {
   // TODO: Return a different file based on user's role
   return {

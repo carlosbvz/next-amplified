@@ -1,6 +1,9 @@
 {
   "Index": {
     "title": "Home Page",
-    "description": "See some cool posts here!"
+    "description": "See some cool posts here!",
+    "errors": {
+      "loadPostError": "Could not get posts"
+    }
   }
 }
