@@ -37,23 +37,24 @@ export default function PostPreview({ post }: Props): ReactElement {
       ? post.votes.items.filter((v) => v.vote === "upvote").length
       : 0
   );
-
   const [downvotes, setDownvotes] = useState<number>(
     post.votes.items
       ? post.votes.items.filter((v) => v.vote === "downvote").length
       : 0
   );
+  const [voteVersion, setVoteVersion] = useState<number>(null);
 
   console.log(post);
 
   useEffect(() => {
     if (user) {
-      const tryFindVotes = post.votes.items?.find(
+      const tryFindVote = post.votes.items?.find(
         (v) => v.owner === user.getUsername()
       );
-      if (tryFindVotes) {
-        setExistingVote(tryFindVotes.vote);
-        setExistingVoteId(tryFindVotes.id);
+      if (tryFindVote) {
+        setExistingVote(tryFindVote.vote);
+        setExistingVoteId(tryFindVote.id);
+        setVoteVersion(tryFindVote._version);
       }
     }
   }, [user]);
@@ -62,7 +63,6 @@ export default function PostPreview({ post }: Props): ReactElement {
     async function getImageFromStorage() {
       try {
         const signedURL = await Storage.get(post.image); // get key from Storage.list
-        console.log("Found Image:", signedURL);
         setPostImage(signedURL);
       } catch (error) {
         console.log("No image found.");
@@ -78,6 +78,7 @@ export default function PostPreview({ post }: Props): ReactElement {
         id: existingVoteId,
         vote: voteType,
         postID: post.id,
+        _version: voteVersion,
       };
       const updateThisVote = (await API.graphql({
         query: updateVote,
@@ -96,11 +97,13 @@ export default function PostPreview({ post }: Props): ReactElement {
       }
       setExistingVote(voteType);
       setExistingVoteId(updateThisVote.data.updateVote.id);
+      setVoteVersion(updateThisVote.data.updateVote._version);
     }
     if (!existingVote) {
       const createNewVoteInput: CreateVoteInput = {
         vote: voteType,
         postID: post.id,
+        _version: voteVersion,
       };
 
       const createNewVote = (await API.graphql({
@@ -116,6 +119,7 @@ export default function PostPreview({ post }: Props): ReactElement {
       }
       setExistingVote(voteType);
       setExistingVoteId(createNewVote.data.createVote.id);
+      setVoteVersion(createNewVote.data.createVote._version);
       console.log("Created vote:", createNewVote);
     }
   }

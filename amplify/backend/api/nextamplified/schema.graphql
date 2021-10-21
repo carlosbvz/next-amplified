@@ -46,3 +46,4 @@ type Vote
   postID: ID
   post: Post @connection(fields: ["postID"])
 }
+  

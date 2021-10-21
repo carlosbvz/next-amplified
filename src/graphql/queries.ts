@@ -9,6 +9,9 @@ export const getPost = /* GraphQL */ `
       title
       contents
       image
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       owner
@@ -17,22 +20,54 @@ export const getPost = /* GraphQL */ `
           id
           postID
           content
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          post {
+            id
+            title
+            contents
+            image
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
           owner
         }
         nextToken
+        startedAt
       }
       votes {
         items {
           id
           vote
           postID
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
+          post {
+            id
+            title
+            contents
+            image
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
           owner
         }
         nextToken
+        startedAt
       }
     }
   }
@@ -49,17 +84,105 @@ export const listPosts = /* GraphQL */ `
         title
         contents
         image
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
         owner
         comments {
+          items {
+            id
+            postID
+            content
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
           nextToken
+          startedAt
         }
         votes {
+          items {
+            id
+            vote
+            postID
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
           nextToken
+          startedAt
         }
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPosts = /* GraphQL */ `
+  query SyncPosts(
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPosts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        title
+        contents
+        image
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+        comments {
+          items {
+            id
+            postID
+            content
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
+          nextToken
+          startedAt
+        }
+        votes {
+          items {
+            id
+            vote
+            postID
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
+          nextToken
+          startedAt
+        }
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -69,6 +192,9 @@ export const getComment = /* GraphQL */ `
       id
       postID
       content
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       post {
@@ -76,14 +202,41 @@ export const getComment = /* GraphQL */ `
         title
         contents
         image
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
         owner
         comments {
+          items {
+            id
+            postID
+            content
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
           nextToken
+          startedAt
         }
         votes {
+          items {
+            id
+            vote
+            postID
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
           nextToken
+          startedAt
         }
       }
       owner
@@ -101,6 +254,9 @@ export const listComments = /* GraphQL */ `
         id
         postID
         content
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
         post {
@@ -108,13 +264,74 @@ export const listComments = /* GraphQL */ `
           title
           contents
           image
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
           owner
+          comments {
+            nextToken
+            startedAt
+          }
+          votes {
+            nextToken
+            startedAt
+          }
         }
         owner
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncComments = /* GraphQL */ `
+  query SyncComments(
+    $filter: ModelCommentFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncComments(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        postID
+        content
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        post {
+          id
+          title
+          contents
+          image
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+          comments {
+            nextToken
+            startedAt
+          }
+          votes {
+            nextToken
+            startedAt
+          }
+        }
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -124,6 +341,9 @@ export const getVote = /* GraphQL */ `
       id
       vote
       postID
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       post {
@@ -131,14 +351,41 @@ export const getVote = /* GraphQL */ `
         title
         contents
         image
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
         owner
         comments {
+          items {
+            id
+            postID
+            content
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
           nextToken
+          startedAt
         }
         votes {
+          items {
+            id
+            vote
+            postID
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
           nextToken
+          startedAt
         }
       }
       owner
@@ -156,6 +403,9 @@ export const listVotes = /* GraphQL */ `
         id
         vote
         postID
+        _version
+        _deleted
+        _lastChangedAt
         createdAt
         updatedAt
         post {
@@ -163,13 +413,74 @@ export const listVotes = /* GraphQL */ `
           title
           contents
           image
+          _version
+          _deleted
+          _lastChangedAt
           createdAt
           updatedAt
           owner
+          comments {
+            nextToken
+            startedAt
+          }
+          votes {
+            nextToken
+            startedAt
+          }
         }
         owner
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncVotes = /* GraphQL */ `
+  query SyncVotes(
+    $filter: ModelVoteFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncVotes(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        vote
+        postID
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        post {
+          id
+          title
+          contents
+          image
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+          comments {
+            nextToken
+            startedAt
+          }
+          votes {
+            nextToken
+            startedAt
+          }
+        }
+        owner
+      }
+      nextToken
+      startedAt
     }
   }
 `;
