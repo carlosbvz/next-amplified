@@ -37,8 +37,6 @@ function IndividualPost({ post }: Props): ReactElement {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log(data);
-
     const newCommentInput: CreateCommentInput = {
       postID: post.id,
       content: data.comment,

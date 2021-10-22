@@ -44,8 +44,6 @@ export default function PostPreview({ post }: Props): ReactElement {
   );
   const [voteVersion, setVoteVersion] = useState<number>(null);
 
-  console.log(post);
-
   useEffect(() => {
     if (user) {
       const tryFindVote = post.votes.items?.find(

@@ -28,9 +28,6 @@ function CreatePost({}: Props): ReactElement {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log(file);
-    console.log(data);
-
     // User uploaded file
     if (file) {
       // Send a request to upload to the S3 Bucket.
