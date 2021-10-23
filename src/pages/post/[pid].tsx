@@ -12,7 +12,7 @@ import { API, withSSRContext } from "aws-amplify";
 import { listPosts, getPost } from "../../graphql/queries";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { createComment } from "../../graphql/mutations";
-import DefaultLayout from "../../layouts/default";
+import { DefaultLayout, PrivatePage } from "../../layouts";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api";
 import PostPreview from "../../components/PostPreview";
 import PostComment from "../../components/postcomment";
@@ -135,8 +135,10 @@ export default function IndividualPostWithLayout({
   post,
 }: Props): ReactElement {
   return (
-    <DefaultLayout>
-      <IndividualPost post={post} />
-    </DefaultLayout>
+    <PrivatePage>
+      <DefaultLayout>
+        <IndividualPost post={post} />
+      </DefaultLayout>
+    </PrivatePage>
   );
 }

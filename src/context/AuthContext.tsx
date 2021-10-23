@@ -5,14 +5,15 @@ import {
   SetStateAction,
   useContext,
   useEffect,
-  useState,
 } from "react";
 import Auth, { CognitoUser } from "@aws-amplify/auth";
 import { Hub } from "aws-amplify";
+import { useAsync } from "../utils/hooks/useAsync";
 
 interface UserContextType {
   user: CognitoUser | null;
   setUser: Dispatch<SetStateAction<CognitoUser>>;
+  userStatus: string;
 }
 
 const UserContext = createContext<UserContextType>({} as UserContextType);
@@ -22,7 +23,13 @@ interface Props {
 }
 
 export default function AuthContext({ children }: Props): ReactElement {
-  const [user, setUser] = useState<CognitoUser | null>(null);
+  const {
+    data: user,
+    status: userStatus,
+    error,
+    run,
+    setData: setUser,
+  } = useAsync();
 
   // Checks for user on every load
   useEffect(() => {
@@ -36,19 +43,21 @@ export default function AuthContext({ children }: Props): ReactElement {
     });
   }, []);
 
+  // In case of an async error
+  useEffect(() => {
+    if (error) setUser(null);
+  }, [error]);
+
   async function checkUser() {
     try {
-      const amplifyUser = await Auth.currentAuthenticatedUser();
-      if (amplifyUser) {
-        setUser(amplifyUser);
-      }
+      run(Auth.currentAuthenticatedUser());
     } catch (error) {
       setUser(null);
     }
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, userStatus }}>
       {children}
     </UserContext.Provider>
   );

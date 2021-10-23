@@ -6,7 +6,7 @@ import PostPreview from "../components/PostPreview";
 import { Fab, Grid, Tooltip, Typography } from "@mui/material";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
-import DefaultLayout from "../layouts/default";
+import { DefaultLayout, PrivatePage } from "../layouts";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
 
@@ -75,8 +75,10 @@ export function getStaticProps({ locale }: GetStaticPropsContext) {
 
 export default function HomeWithLayout() {
   return (
-    <DefaultLayout>
-      <Home />
-    </DefaultLayout>
+    <PrivatePage>
+      <DefaultLayout>
+        <Home />
+      </DefaultLayout>
+    </PrivatePage>
   );
 }

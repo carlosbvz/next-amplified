@@ -6,7 +6,7 @@ import React, { ReactElement, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CreatePostInput, CreatePostMutation } from "../../API";
 import { createPost } from "../../graphql/mutations";
-import DefaultLayout from "../../layouts/default";
+import { DefaultLayout, PrivatePage } from "../../layouts";
 import { v4 as uuidv4 } from "uuid";
 import { Container, Grid, TextField, Button } from "@mui/material";
 import ImageDropzone from "../../components/dropzone/ImageDropzone";
@@ -142,9 +142,11 @@ function CreatePost({}: Props): ReactElement {
 
 export default function CreatePostWithLayout() {
   return (
-    <DefaultLayout>
-      <CreatePost />
-    </DefaultLayout>
+    <PrivatePage>
+      <DefaultLayout>
+        <CreatePost />
+      </DefaultLayout>
+    </PrivatePage>
   );
 }
 
