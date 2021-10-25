@@ -4,7 +4,7 @@ import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
 import React, { ReactElement, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { CreatePostInput, CreatePostMutation } from "../../API";
+import { CreatePostInput, CreatePostMutation, PostStatus } from "../../API";
 import { createPost } from "../../graphql/mutations";
 import { DefaultLayout, PrivatePage } from "../../layouts";
 import { v4 as uuidv4 } from "uuid";
@@ -18,7 +18,6 @@ import {
   Select,
 } from "@mui/material";
 import ImageDropzone from "../../components/dropzone/ImageDropzone";
-import { PostStatus } from "../../API";
 
 interface IFormInput {
   title: string;
@@ -55,7 +54,6 @@ function CreatePost({}: Props): ReactElement {
           image: imagePath,
         };
 
-        // TODO: This auth mode can be abstracted to a different global functionality
         const createNewPost = (await API.graphql({
           query: createPost,
           variables: { input: createNewPostInput },

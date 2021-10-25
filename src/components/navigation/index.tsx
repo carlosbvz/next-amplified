@@ -16,7 +16,6 @@ import { useTranslations } from "next-intl";
 import { useUser } from "../../context/AuthContext";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import Auth from "@aws-amplify/auth";
-// import { Tooltip } from "@mui/material";
 
 export default function PrimarySearchAppBar() {
   const t = useTranslations("Navigation");
@@ -152,30 +151,6 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {user && (
               <>
-                {/* <Tooltip title="4 Incoming messages">
-                  <IconButton
-                    size="large"
-                    aria-label="show 4 new mails"
-                    color="inherit"
-                  >
-                    <Badge badgeContent={4} color="error">
-                      <MailIcon />
-                    </Badge>
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="17 Notifications">
-                  <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                  >
-                    <Badge badgeContent={17} color="error">
-                      <NotificationsIcon />
-                    </Badge>
-                  </IconButton>
-                </Tooltip> */}
-
                 <IconButton
                   size="large"
                   edge="end"

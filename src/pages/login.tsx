@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -7,6 +7,7 @@ import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import DefaultLayout from "../layouts/default";
 import { GetStaticPropsContext } from "next";
+import { useAsync } from "../utils/hooks/useAsync";
 
 interface IFormInput {
   username: string;
@@ -23,10 +24,10 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 function Login() {
-  // TODO: Move this logic to useAsync / useQuery or useSWR strategy
   const [loginError, setLoginError] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
+  const { data: user, status: loginStatus, error, run } = useAsync();
 
   const {
     register,
@@ -34,13 +35,21 @@ function Login() {
     handleSubmit,
   } = useForm();
 
+  useEffect(() => {
+    if (error) {
+      setLoginError(error.message);
+      setOpen(true);
+    } else {
+      if (user && loginStatus === "resolved") router.push("/");
+    }
+  }, [user, loginStatus, error]);
+
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const { username, password } = data;
     try {
-      await Auth.signIn(username, password);
-      router.push("/");
-    } catch (error) {
-      setLoginError(error.message);
+      run(Auth.signIn(username, password));
+    } catch (fetchError) {
+      setLoginError(fetchError.message);
       setOpen(true);
     }
   };
@@ -85,7 +94,12 @@ function Login() {
           </Grid>
 
           <Grid item>
-            <Button variant="contained" type="submit" fullWidth>
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              disabled={loginStatus === "pending" ? true : false}
+            >
               Login
             </Button>
           </Grid>

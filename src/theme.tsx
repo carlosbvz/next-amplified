@@ -76,6 +76,17 @@ const theme = createTheme({
       color: "#9CA3AF",
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          "&.Mui-disabled": {
+            backgroundColor: "#026aa7",
+          },
+        },
+      },
+    },
+  },
 });
 
 // https://material-ui.com/customization/theming/#responsivefontsizes-theme-options-theme
