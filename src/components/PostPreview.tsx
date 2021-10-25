@@ -141,7 +141,11 @@ export default function PostPreview({ post }: Props): ReactElement {
         <Grid item alignItems="center" xs={2}>
           <Grid container direction="column" alignItems="center">
             <Grid item>
-              <IconButton color="inherit" onClick={() => addVote("upvote")}>
+              <IconButton
+                color="inherit"
+                onClick={() => addVote("upvote")}
+                aria-label="Upvote"
+              >
                 <ArrowUpwardIcon style={{ maxWidth: 24 }} />
               </IconButton>
             </Grid>
@@ -156,7 +160,11 @@ export default function PostPreview({ post }: Props): ReactElement {
               </Grid>
             </Grid>
             <Grid item>
-              <IconButton color="inherit" onClick={() => addVote("downvote")}>
+              <IconButton
+                color="inherit"
+                onClick={() => addVote("downvote")}
+                aria-label="Downvote"
+              >
                 <ArrowDownwardIcon style={{ maxWidth: 24 }} />
               </IconButton>
             </Grid>
@@ -187,6 +195,7 @@ export default function PostPreview({ post }: Props): ReactElement {
                 <Grid item>
                   <Image
                     src={postImage}
+                    alt={""}
                     height={540}
                     width={980}
                     layout="intrinsic"
