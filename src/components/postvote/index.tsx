@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Vote } from "../../API";
+import { Post } from "../../API";
 import { Grid, Typography } from "@mui/material";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -7,11 +7,11 @@ import IconButton from "@mui/material/IconButton";
 import { useVote } from "../../utils/hooks/useVote";
 
 interface Props {
-  votes: Vote[];
+  post: Post;
 }
 
-export default function PostVote({ votes }: Props): ReactElement {
-  const { addVote, upvotes, downvotes } = useVote(votes);
+export default function PostVote({ post }: Props): ReactElement {
+  const { addVote, upvotes, downvotes } = useVote(post);
 
   return (
     <Grid item alignItems="center" xs={2}>

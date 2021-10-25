@@ -44,7 +44,7 @@ export default function PostPreview({ post }: Props): ReactElement {
         }}
       >
         {/* Votes */}
-        <PostVote votes={post?.votes?.items} />
+        <PostVote post={post} />
         {/* Content Preview */}
         <Grid item xs={10}>
           <ButtonBase onClick={() => router.push(`/post/${post.id}`)}>

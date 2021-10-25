@@ -29,7 +29,9 @@ interface Props {}
 function CreatePost({}: Props): ReactElement {
   const [file, setFile] = useState<File>();
   const router = useRouter();
-  const [selectedStatus, setSelectedStatus] = useState("DRAFT");
+  const [selectedStatus, setSelectedStatus] = useState<PostStatus>(
+    PostStatus.DRAFT
+  );
 
   const {
     register,
@@ -137,14 +139,14 @@ function CreatePost({}: Props): ReactElement {
           </Grid>
           <br />
           <Grid>
-            <InputLabel id="demo-simple-select-label">Post Status</InputLabel>
+            <InputLabel id="post-status-label">Post Status</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={selectedStatus}
-              label="Age"
+              labelId="post-status-label"
+              id="status"
+              defaultValue={selectedStatus}
+              label="Post Status"
               onChange={(e) => {
-                setSelectedStatus(e.target.value);
+                setSelectedStatus(e.target.value as PostStatus);
               }}
               fullWidth
               error={errors.status ? true : false}
@@ -155,8 +157,8 @@ function CreatePost({}: Props): ReactElement {
                 },
               })}
             >
-              <MenuItem value={"DRAFT"}>Draft</MenuItem>
-              <MenuItem value={"PUBLISHED"}>Published</MenuItem>
+              <MenuItem value={PostStatus.DRAFT}>Draft</MenuItem>
+              <MenuItem value={PostStatus.PUBLISHED}>Published</MenuItem>
             </Select>
           </Grid>
           {/* Optional Image of the post */}
