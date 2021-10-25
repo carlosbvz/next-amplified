@@ -11,6 +11,7 @@ export const createPost = /* GraphQL */ `
       id
       title
       contents
+      status
       image
       _version
       _deleted
@@ -32,6 +33,7 @@ export const createPost = /* GraphQL */ `
             id
             title
             contents
+            status
             image
             _version
             _deleted
@@ -59,6 +61,7 @@ export const createPost = /* GraphQL */ `
             id
             title
             contents
+            status
             image
             _version
             _deleted
@@ -84,6 +87,7 @@ export const updatePost = /* GraphQL */ `
       id
       title
       contents
+      status
       image
       _version
       _deleted
@@ -105,6 +109,7 @@ export const updatePost = /* GraphQL */ `
             id
             title
             contents
+            status
             image
             _version
             _deleted
@@ -132,6 +137,7 @@ export const updatePost = /* GraphQL */ `
             id
             title
             contents
+            status
             image
             _version
             _deleted
@@ -157,6 +163,7 @@ export const deletePost = /* GraphQL */ `
       id
       title
       contents
+      status
       image
       _version
       _deleted
@@ -178,6 +185,7 @@ export const deletePost = /* GraphQL */ `
             id
             title
             contents
+            status
             image
             _version
             _deleted
@@ -205,6 +213,7 @@ export const deletePost = /* GraphQL */ `
             id
             title
             contents
+            status
             image
             _version
             _deleted
@@ -239,6 +248,7 @@ export const createComment = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -299,6 +309,7 @@ export const updateComment = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -359,6 +370,7 @@ export const deleteComment = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -419,6 +431,7 @@ export const createVote = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -479,6 +492,7 @@ export const updateVote = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -539,6 +553,7 @@ export const deleteVote = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted

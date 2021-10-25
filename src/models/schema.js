@@ -24,6 +24,15 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "PostStatus"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "image": {
                     "name": "image",
                     "isArray": false,
@@ -310,7 +319,15 @@ export const schema = {
             ]
         }
     },
-    "enums": {},
+    "enums": {
+        "PostStatus": {
+            "name": "PostStatus",
+            "values": [
+                "DRAFT",
+                "PUBLISHED"
+            ]
+        }
+    },
     "nonModels": {},
-    "version": "d50f3587d6f9f99ca441fdab91c5ed76"
+    "version": "8372a2d9cc21a396d9b090598372c556"
 };

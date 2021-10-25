@@ -1,3 +1,8 @@
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
 type Post
   @model
   @auth(
@@ -10,6 +15,7 @@ type Post
   id: ID!
   title: String!
   contents: String!
+  status: PostStatus!
   image: String
   votes: [Vote!] @connection(keyName: "byVote", fields: ["id"])
   comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
@@ -46,4 +52,3 @@ type Vote
   postID: ID
   post: Post @connection(fields: ["postID"])
 }
-  

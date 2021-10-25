@@ -8,6 +8,7 @@ export const getPost = /* GraphQL */ `
       id
       title
       contents
+      status
       image
       _version
       _deleted
@@ -29,6 +30,7 @@ export const getPost = /* GraphQL */ `
             id
             title
             contents
+            status
             image
             _version
             _deleted
@@ -56,6 +58,7 @@ export const getPost = /* GraphQL */ `
             id
             title
             contents
+            status
             image
             _version
             _deleted
@@ -83,6 +86,7 @@ export const listPosts = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -143,6 +147,7 @@ export const syncPosts = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -201,6 +206,7 @@ export const getComment = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -263,6 +269,7 @@ export const listComments = /* GraphQL */ `
           id
           title
           contents
+          status
           image
           _version
           _deleted
@@ -312,6 +319,7 @@ export const syncComments = /* GraphQL */ `
           id
           title
           contents
+          status
           image
           _version
           _deleted
@@ -350,6 +358,7 @@ export const getVote = /* GraphQL */ `
         id
         title
         contents
+        status
         image
         _version
         _deleted
@@ -412,6 +421,7 @@ export const listVotes = /* GraphQL */ `
           id
           title
           contents
+          status
           image
           _version
           _deleted
@@ -461,6 +471,7 @@ export const syncVotes = /* GraphQL */ `
           id
           title
           contents
+          status
           image
           _version
           _deleted

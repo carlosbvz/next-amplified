@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API } from "aws-amplify";
 import { listPosts } from "../graphql/queries";
-import { ListPostsQuery, Post } from "../API";
+import { ListPostsQuery, Post, PostStatus } from "../API";
 import PostPreview from "../components/PostPreview";
 import { Fab, Grid, Tooltip, Typography } from "@mui/material";
 import { GetStaticPropsContext } from "next";
@@ -23,8 +23,12 @@ function Home() {
       };
 
       if (allPosts.data) {
-        setPosts(allPosts.data.listPosts.items as Post[]);
-        return allPosts.data.listPosts.items as Post[];
+        const publishedPosts = allPosts?.data?.listPosts?.items.filter(
+          (post) => post.status !== PostStatus.DRAFT
+        );
+
+        setPosts(publishedPosts as Post[]);
+        return publishedPosts as Post[];
       } else {
         throw new Error(t("errors.loadPostError"));
       }

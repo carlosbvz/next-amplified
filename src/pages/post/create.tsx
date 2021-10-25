@@ -8,12 +8,22 @@ import { CreatePostInput, CreatePostMutation } from "../../API";
 import { createPost } from "../../graphql/mutations";
 import { DefaultLayout, PrivatePage } from "../../layouts";
 import { v4 as uuidv4 } from "uuid";
-import { Container, Grid, TextField, Button } from "@mui/material";
+import {
+  Container,
+  Grid,
+  TextField,
+  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import ImageDropzone from "../../components/dropzone/ImageDropzone";
+import { PostStatus } from "../../API";
 
 interface IFormInput {
   title: string;
   content: string;
+  status: PostStatus;
 }
 interface Props {}
 
@@ -41,6 +51,7 @@ function CreatePost({}: Props): ReactElement {
         const createNewPostInput: CreatePostInput = {
           title: data.title,
           contents: data.content,
+          status: data.status,
           image: imagePath,
         };
 
@@ -61,6 +72,7 @@ function CreatePost({}: Props): ReactElement {
       const createNewPostWithoutImageInput: CreatePostInput = {
         title: data.title,
         contents: data.content,
+        status: data.status,
       };
 
       const createNewPostWithoutImage = (await API.graphql({
@@ -123,6 +135,28 @@ function CreatePost({}: Props): ReactElement {
                 },
               })}
             />
+          </Grid>
+          <br />
+          <Grid>
+            <InputLabel id="demo-simple-select-label">Post Status</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={PostStatus.DRAFT}
+              label="Age"
+              onChange={() => {}}
+              fullWidth
+              error={errors.status ? true : false}
+              {...register("status", {
+                required: {
+                  value: true,
+                  message: "Please a Post status",
+                },
+              })}
+            >
+              <MenuItem value={PostStatus.DRAFT}>Draft</MenuItem>
+              <MenuItem value={PostStatus.PUBLISHED}>Published</MenuItem>
+            </Select>
           </Grid>
           {/* Optional Image of the post */}
           <br />
