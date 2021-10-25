@@ -1,18 +1,18 @@
-import * as React from "react";
+import { useRef, useEffect, useCallback, useReducer } from "react";
 
 // TODO: Type this file
 
 function useSafeDispatch(dispatch) {
-  const mounted = React.useRef(false);
+  const mounted = useRef(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
     };
   }, []);
 
-  return React.useCallback(
+  return useCallback(
     (...args) => (mounted.current ? dispatch(...args) : void 0),
     [dispatch]
   );
@@ -36,7 +36,7 @@ function asyncReducer(state, action) {
 }
 
 function useAsync(initialState = {}) {
-  const [state, unsafeDispatch] = React.useReducer(asyncReducer, {
+  const [state, unsafeDispatch] = useReducer(asyncReducer, {
     status: "idle",
     data: null,
     error: null,
@@ -47,7 +47,7 @@ function useAsync(initialState = {}) {
 
   const { data, error, status } = state;
 
-  const run = React.useCallback(
+  const run = useCallback(
     (promise) => {
       dispatch({ type: "pending" });
       promise.then(
@@ -62,11 +62,11 @@ function useAsync(initialState = {}) {
     [dispatch]
   );
 
-  const setData = React.useCallback(
+  const setData = useCallback(
     (fetchData) => dispatch({ type: "resolved", data: fetchData }),
     [dispatch]
   );
-  const setError = React.useCallback(
+  const setError = useCallback(
     (fetchError) => dispatch({ type: "rejected", error: fetchError }),
     [dispatch]
   );

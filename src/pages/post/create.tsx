@@ -29,6 +29,7 @@ interface Props {}
 function CreatePost({}: Props): ReactElement {
   const [file, setFile] = useState<File>();
   const router = useRouter();
+  const [selectedStatus, setSelectedStatus] = useState("DRAFT");
 
   const {
     register,
@@ -140,9 +141,11 @@ function CreatePost({}: Props): ReactElement {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={PostStatus.DRAFT}
+              value={selectedStatus}
               label="Age"
-              onChange={() => {}}
+              onChange={(e) => {
+                setSelectedStatus(e.target.value);
+              }}
               fullWidth
               error={errors.status ? true : false}
               {...register("status", {
@@ -152,8 +155,8 @@ function CreatePost({}: Props): ReactElement {
                 },
               })}
             >
-              <MenuItem value={PostStatus.DRAFT}>Draft</MenuItem>
-              <MenuItem value={PostStatus.PUBLISHED}>Published</MenuItem>
+              <MenuItem value={"DRAFT"}>Draft</MenuItem>
+              <MenuItem value={"PUBLISHED"}>Published</MenuItem>
             </Select>
           </Grid>
           {/* Optional Image of the post */}
