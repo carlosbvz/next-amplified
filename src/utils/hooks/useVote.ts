@@ -45,7 +45,12 @@ async function updateExistingVote(data: IVote) {
   })) as { data: UpdateVoteMutation };
 }
 
-async function requestServerChange(data) {
+async function requestServerChange(data: {
+  userVote: Vote;
+  voteType: string;
+  post: Post;
+  setUserVote: any;
+}) {
   const { userVote, voteType, post, setUserVote } = data;
   if (!userVote) {
     const newVote = await createNewVote({ voteType, postID: post.id });
@@ -55,23 +60,34 @@ async function requestServerChange(data) {
     setUserVote(updatedVote);
   }
 }
+
 function requestUIChange(data) {
-  const { voteType, upvotes, setUpvotes, downvotes, setDownvotes } = data;
+  const { userVote, voteType, upvotes, setUpvotes, downvotes, setDownvotes } =
+    data;
   // Updating UI
-  if (voteType === "upvote") {
-    setUpvotes(upvotes + 1);
-    setDownvotes(downvotes - 1);
-  }
-  if (voteType === "downvote") {
-    setUpvotes(upvotes - 1);
-    setDownvotes(downvotes + 1);
+  if (userVote) {
+    if (voteType === "upvote") {
+      setUpvotes(upvotes + 1);
+    }
+    if (voteType === "downvote") {
+      setDownvotes(downvotes + 1);
+    }
+  } else {
+    if (voteType === "upvote") {
+      setUpvotes(upvotes + 1);
+      setDownvotes(downvotes - 1);
+    }
+    if (voteType === "downvote") {
+      setUpvotes(upvotes - 1);
+      setDownvotes(downvotes + 1);
+    }
   }
 }
 
 function useVote(post: Post) {
   const initialVotes = post?.votes?.items;
   const { user } = useUser();
-  const [userVote, setUserVote] = useState(null); // TODO: Type this.
+  const [userVote, setUserVote] = useState<Vote | null>(null);
   const [upvotes, setUpvotes] = useState<number>(
     initialVotes ? initialVotes.filter((v) => v.vote === "upvote").length : 0
   );
@@ -94,7 +110,14 @@ function useVote(post: Post) {
     if (userVote?.vote === voteType) return; // Same Vote
 
     requestServerChange({ userVote, voteType, post, setUserVote });
-    requestUIChange({ voteType, upvotes, setUpvotes, downvotes, setDownvotes });
+    requestUIChange({
+      userVote,
+      voteType,
+      upvotes,
+      setUpvotes,
+      downvotes,
+      setDownvotes,
+    });
   }
 
   return {

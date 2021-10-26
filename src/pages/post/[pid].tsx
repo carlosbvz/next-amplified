@@ -27,9 +27,7 @@ interface Props {
 }
 
 function IndividualPost({ post }: Props): ReactElement {
-  const [comments, setComments] = useState<Comment[]>(
-    post.comments.items as Comment[]
-  );
+  const [comments, setComments] = useState<Comment[]>(post.comments.items);
   const {
     register,
     formState: { errors },
