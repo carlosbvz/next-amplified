@@ -68,17 +68,17 @@ function requestUIChange(data) {
   if (userVote) {
     if (voteType === "upvote") {
       setUpvotes(upvotes + 1);
+      setDownvotes(downvotes - 1);
     }
     if (voteType === "downvote") {
+      setUpvotes(upvotes - 1);
       setDownvotes(downvotes + 1);
     }
   } else {
     if (voteType === "upvote") {
       setUpvotes(upvotes + 1);
-      setDownvotes(downvotes - 1);
     }
     if (voteType === "downvote") {
-      setUpvotes(upvotes - 1);
       setDownvotes(downvotes + 1);
     }
   }
