@@ -24,8 +24,8 @@ function Home() {
           (post) => post.status !== PostStatus.DRAFT
         );
 
-        setPosts(publishedPosts as Post[]);
-        return publishedPosts as Post[];
+        setPosts(publishedPosts);
+        return publishedPosts;
       } else {
         throw new Error(t("errors.loadPostError"));
       }

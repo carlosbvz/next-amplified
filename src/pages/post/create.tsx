@@ -1,11 +1,9 @@
-import { API, Storage } from "aws-amplify";
-import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api-graphql";
+import { Storage } from "aws-amplify";
 import { GetStaticPropsContext } from "next";
 import { useRouter } from "next/router";
 import React, { ReactElement, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { CreatePostInput, CreatePostMutation, PostStatus } from "../../API";
-import { createPost } from "../../graphql/mutations";
+import { PostStatus } from "../../API";
 import { DefaultLayout, PrivatePage } from "../../layouts";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -18,6 +16,16 @@ import {
   Select,
 } from "@mui/material";
 import ImageDropzone from "../../components/dropzone/ImageDropzone";
+import { DataStore, syncExpression } from "@aws-amplify/datastore";
+import { Post } from "../../models";
+
+DataStore.configure({
+  syncExpressions: [
+    syncExpression(Post, () => {
+      return (post) => post;
+    }),
+  ],
+});
 
 interface IFormInput {
   title: string;
@@ -41,48 +49,30 @@ function CreatePost({}: Props): ReactElement {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // User uploaded file
-    if (file) {
-      // Send a request to upload to the S3 Bucket.
-      try {
-        const imagePath = uuidv4();
 
+    // Send a request to upload to the S3 Bucket.
+    try {
+      let imagePath = null;
+      if (file) {
+        imagePath = uuidv4();
         await Storage.put(imagePath, file, {
           contentType: file.type, // contentType is optional
         });
+      }
 
-        const createNewPostInput: CreatePostInput = {
+      const newPost = await DataStore.save(
+        new Post({
           title: data.title,
           contents: data.content,
           status: data.status,
           image: imagePath,
-        };
+        })
+      );
 
-        const createNewPost = (await API.graphql({
-          query: createPost,
-          variables: { input: createNewPostInput },
-          authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS, // This tells AWS who we are
-        })) as { data: CreatePostMutation };
-
-        console.log("New post created successfully:", createNewPost);
-
-        router.push(`/post/${createNewPost.data.createPost.id}`);
-      } catch (error) {
-        console.error("Error uploading file: ", error);
-      }
-    } else {
-      const createNewPostWithoutImageInput: CreatePostInput = {
-        title: data.title,
-        contents: data.content,
-        status: data.status,
-      };
-
-      const createNewPostWithoutImage = (await API.graphql({
-        query: createPost,
-        variables: { input: createNewPostWithoutImageInput },
-        authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
-      })) as { data: CreatePostMutation };
-
-      router.push(`/post/${createNewPostWithoutImage.data.createPost.id}`);
+      console.log("New post created successfully:", newPost);
+      router.push(`/post/${newPost.id}`);
+    } catch (error) {
+      console.error("Error uploading file: ", error);
     }
   };
 

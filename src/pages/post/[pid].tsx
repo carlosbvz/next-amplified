@@ -88,10 +88,13 @@ function IndividualPost({ post }: Props): ReactElement {
 export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   const SSR = withSSRContext();
   const post = await SSR.DataStore.query(Post, params.pid);
+  const serializedPost = post ? serializeModel(post) : ({} as Post);
+
+  console.log(params.id);
 
   return {
     props: {
-      post: serializeModel(post),
+      post: serializedPost,
       messages: {
         ...require(`../../../messages/shared/navigation/${locale}.json`),
       },
@@ -104,6 +107,8 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   const SSR = withSSRContext();
   const allPosts = await SSR.DataStore.query(Post);
+
+  console.log(allPosts);
 
   const paths = allPosts.map((post) => ({
     params: { pid: post.id },
