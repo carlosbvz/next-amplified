@@ -1,8 +1,6 @@
 import React, { ReactElement, useState } from "react";
 import { GetStaticProps, GetStaticPaths } from "next";
-import { ListPostsQuery } from "../../API";
 import { withSSRContext } from "aws-amplify";
-import { listPosts } from "../../graphql/queries";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { DefaultLayout, PrivatePage } from "../../layouts";
 import PostPreview from "../../components/PostPreview";
