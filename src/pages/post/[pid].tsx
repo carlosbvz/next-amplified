@@ -1,22 +1,16 @@
 import React, { ReactElement, useState } from "react";
 import { GetStaticProps, GetStaticPaths } from "next";
-import {
-  GetPostQuery,
-  ListPostsQuery,
-  Post,
-  Comment,
-  CreateCommentInput,
-  CreateCommentMutation,
-} from "../../API";
-import { API, withSSRContext } from "aws-amplify";
-import { listPosts, getPost } from "../../graphql/queries";
+import { ListPostsQuery } from "../../API";
+import { withSSRContext } from "aws-amplify";
+import { listPosts } from "../../graphql/queries";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { createComment } from "../../graphql/mutations";
 import { DefaultLayout, PrivatePage } from "../../layouts";
-import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api";
 import PostPreview from "../../components/PostPreview";
-import PostComment from "../../components/postcomment";
+// import PostComment from "../../components/postcomment";
 import { Grid, TextField, Button } from "@mui/material";
+import { DataStore } from "@aws-amplify/datastore";
+import { Post, Comment } from "../../models";
+import { serializeModel } from "@aws-amplify/datastore/ssr";
 
 interface IFormInput {
   comment: string;
@@ -27,7 +21,8 @@ interface Props {
 }
 
 function IndividualPost({ post }: Props): ReactElement {
-  const [comments, setComments] = useState<Comment[]>(post.comments.items);
+  console.log(post);
+  const [comments, setComments] = useState<Comment[]>(post.comments);
   const {
     register,
     formState: { errors },
@@ -35,18 +30,14 @@ function IndividualPost({ post }: Props): ReactElement {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    const newCommentInput: CreateCommentInput = {
-      postID: post.id,
-      content: data.comment,
-    };
-    // Add Comment Mutation
-    const createNewComment = (await API.graphql({
-      query: createComment,
-      variables: { input: newCommentInput },
-      authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
-    })) as { data: CreateCommentMutation };
+    const newComment: Comment = await DataStore.save(
+      new Comment({
+        content: data.comment,
+        post,
+      })
+    );
 
-    setComments([...comments, createNewComment.data.createComment as Comment]);
+    setComments([...comments, newComment]);
   };
 
   return (
@@ -86,27 +77,23 @@ function IndividualPost({ post }: Props): ReactElement {
           </Grid>
         </Grid>
       </form>
-      {comments
+      {/* {comments
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         .map((comment) => (
+          <div key={comment.id}>{comment.content}</div>
           <PostComment key={comment.id} comment={comment} />
-        ))}
+        ))} */}
     </div>
   );
 }
 
 export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   const SSR = withSSRContext();
-  const postQuery = (await SSR.API.graphql({
-    query: getPost,
-    variables: {
-      id: params.pid,
-    },
-  })) as { data: GetPostQuery };
+  const post = await SSR.DataStore.query(Post, params.pid);
 
   return {
     props: {
-      post: postQuery.data.getPost as Post,
+      post: serializeModel(post),
       messages: {
         ...require(`../../../messages/shared/navigation/${locale}.json`),
       },
@@ -118,11 +105,9 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
 // Return the Path for all possible posts
 export const getStaticPaths: GetStaticPaths = async () => {
   const SSR = withSSRContext();
-  const response = (await SSR.API.graphql({ query: listPosts })) as {
-    data: ListPostsQuery;
-    error: any[];
-  };
-  const paths = response.data.listPosts.items.map((post) => ({
+  const allPosts = await SSR.DataStore.query(Post);
+
+  const paths = allPosts.map((post) => ({
     params: { pid: post.id },
   }));
 
