@@ -1,3 +1,11 @@
+## FAQs
+
+1. Cannot build nextjs locally.
+   Error: `errors: [ { message: 'connect ECONNREFUSED 192.168.0.3:20002' } ]`
+   Solution:
+   Please take a look at the aws-exports.js file and make sure the `aws_appsync_graphqlEndpoint` is not pointing to your local.
+   If it is pointing to your local, please run: `amplify env pull`. Just make sure to be using the proper amplify env.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
