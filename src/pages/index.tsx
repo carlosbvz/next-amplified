@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { API } from "aws-amplify";
-import { listPosts } from "../graphql/queries";
-import { ListPostsQuery, Post, PostStatus } from "../API";
+import { PostStatus } from "../API";
 import PostPreview from "../components/PostPreview";
 import { Fab, Grid, Tooltip, Typography } from "@mui/material";
 import { GetStaticPropsContext } from "next";
@@ -9,6 +7,8 @@ import { useTranslations } from "next-intl";
 import { DefaultLayout, PrivatePage } from "../layouts";
 import AddIcon from "@mui/icons-material/Add";
 import { useRouter } from "next/router";
+import { DataStore } from "@aws-amplify/datastore";
+import { Post } from "../models";
 
 function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -17,13 +17,10 @@ function Home() {
 
   useEffect(() => {
     const fetchPostsFromApi = async (): Promise<Post[]> => {
-      const allPosts = (await API.graphql({ query: listPosts })) as {
-        data: ListPostsQuery;
-        errors: any[];
-      };
+      const allPosts = await DataStore.query(Post);
 
-      if (allPosts.data) {
-        const publishedPosts = allPosts?.data?.listPosts?.items.filter(
+      if (allPosts) {
+        const publishedPosts = allPosts.filter(
           (post) => post.status !== PostStatus.DRAFT
         );
 

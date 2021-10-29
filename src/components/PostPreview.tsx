@@ -1,11 +1,11 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { Storage } from "aws-amplify";
-import { Post } from "../API";
+import { Post } from "../models";
 import { Grid, Paper, Typography, ButtonBase } from "@mui/material";
 import Image from "next/image";
 import Truncate from "../utils/Truncate";
 import { useRouter } from "next/router";
-import PostVote from "../components/postvote";
+// import PostVote from "../components/postvote";
 
 interface Props {
   post: Post;
@@ -44,14 +44,14 @@ export default function PostPreview({ post }: Props): ReactElement {
         }}
       >
         {/* Votes */}
-        <PostVote post={post} />
+        {/* <PostVote post={post} /> */}
         {/* Content Preview */}
         <Grid item xs={10}>
           <ButtonBase onClick={() => router.push(`/post/${post.id}`)}>
             <Grid container direction="column" alignItems="flex-start">
               <Grid item>
                 <Typography variant="body1">
-                  Posted by <b>{post.owner}</b> at <b>{post.createdAt}</b>
+                  Posted by <b>post.owner</b> at <b>{post.createdAt}</b>
                 </Typography>
               </Grid>
               <Grid item>
